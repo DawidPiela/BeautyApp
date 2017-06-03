@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-sm-3">
+                    <label for="sort-field">Sort By</label>
+                    <select
+                        class="form-control"
+                        name="sort-field"
+                        id="sort-field"
+                        [(ngModel)]="sortField">
+                        <option
+                            *ngFor="let field of sortFields"
+                            [value]="field">
+                                {{ utilService.capitalize(field) }}
+                            </option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="sort-direction">Sort Direction</label>
+                    <div>
+
+                        <button
+                            class="btn btn-primary"
+                            [ngClass]="{'btn-success': sortDirection == 'asc'}"
+                            (click)="sortDirection = 'asc'">
+                            Asc
+                        </button>
+
+                        <button
+                            class="btn btn-primary"
+                            [ngClass]="{'btn-success': sortDirection == 'desc'}"
+                            (click)="sortDirection = 'desc'">
+                            Desc
+                        </button>
+
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <label for="filter-field">Filter By</label>
+                    <select
+                        class="form-control"
+                        name="filter-field"
+                        id="filter-field"
+                        [(ngModel)]="filterField">
+                        <option
+                            *ngFor="let field of filterFields"
+                            [value]="field">
+                            {{ utilService.capitalize(field) }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="filter-form">Filter Input</label>
+                    <input
+                        [(ngModel)]="form"
+                        type="text"
+                        class="form-control"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table #myTable>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>firstName</th>
+        <th>Last Name</th>
+        <th>Date Of Birth</th>
+        <th>Function</th>
+        <th>Experience</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let employee of employees | sortBy: [sortField, sortDirection] | filter: [form, filterField] | paginate: {itemsPerPage: 5, currentPage:page, id: '1'}; let i = index">
+            <td>{{ employee.id }}</td>
+            <td>{{ employee.firstName }}</td>
+            <td>{{ employee.lastName }}</td>
+            <td>{{ employee.dateOfBirth }} </td>
+            <td>{{ employee.function }}</td>
+            <td>{{ employee.experience }}</td>
+        </tr>
+    </tbody>
+</table>
+<pagination-controls (pageChange)="page = $event" id="1"
+                     maxSize="5"
+                     directionLinks="true"
+                     autoHide="true">
+</pagination-controls>
